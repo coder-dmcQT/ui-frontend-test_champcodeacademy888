@@ -34,7 +34,9 @@ const DialogGlobalStyle = createGlobalStyle`
 `;
 
 // -------------------------- 对话框样式 --------------------------
-const DialogWrapper = styled.div<{ isDarkMode: boolean }>`
+const DialogWrapper = styled.div.withConfig({
+    shouldForwardProp: (prop) => prop !== 'isDarkMode'
+})<{ isDarkMode: boolean }>`
   background: ${({ isDarkMode }) => (isDarkMode ? '#1e1b4b' : '#ffffff')};
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -53,13 +55,17 @@ const DialogHeader = styled.div`
   border-bottom: 1px solid #e5e7eb;
 `;
 
-const DialogTitle = styled.h3<{ isDarkMode: boolean }>`
+const DialogTitle = styled.h3.withConfig({
+    shouldForwardProp: (prop) => prop !== 'isDarkMode'
+})<{ isDarkMode: boolean }>`
   font-size: 18px;
   font-weight: 600;
   color: ${({ isDarkMode }) => (isDarkMode ? '#f9fafb' : '#111827')};
 `;
 
-const CloseBtn = styled.button<{ isDarkMode: boolean }>`
+const CloseBtn = styled.button.withConfig({
+    shouldForwardProp: (prop) => prop !== 'isDarkMode'
+})<{ isDarkMode: boolean }>`
   background: transparent;
   border: none;
   color: ${({ isDarkMode }) => (isDarkMode ? '#9ca3af' : '#6b7280')};
@@ -76,7 +82,9 @@ const CloseBtn = styled.button<{ isDarkMode: boolean }>`
   }
 `;
 
-const DialogBody = styled.div<{ isDarkMode: boolean }>`
+const DialogBody = styled.div.withConfig({
+    shouldForwardProp: (prop) => prop !== 'isDarkMode'
+})<{ isDarkMode: boolean }>`
   margin-bottom: 20px;
   font-size: 14px;
   color: ${({ isDarkMode }) => (isDarkMode ? '#d1d5db' : '#4b5563')};
@@ -89,7 +97,9 @@ const DialogFooter = styled.div`
   gap: 12px;
 `;
 
-const DialogBtn = styled.button<{ type: 'primary' | 'default', isDarkMode: boolean }>`
+const DialogBtn = styled.button.withConfig({
+    shouldForwardProp: (prop) => prop !== 'isDarkMode'
+})<{ type: 'primary' | 'default', isDarkMode: boolean }>`
   padding: 8px 16px;
   border-radius: 6px;
   font-size: 14px;

@@ -345,6 +345,8 @@ const FooterText = styled.p.withConfig({
     }
 `;
 
+import {useMessage} from "@/src/components/Message";
+
 // -------------------------- 登录组件逻辑 --------------------------
 export default function LoginPage() {
     // 基础状态
@@ -357,7 +359,7 @@ export default function LoginPage() {
 
     const router = useRouter();
     const { login, isLoggedIn, isDarkerMode: isDarkMode, setDarkerMode } = useAppBaseState();
-
+    const message = useMessage();
     // 已登录跳转
     useEffect(() => {
         if (isLoggedIn) {
@@ -396,6 +398,7 @@ export default function LoginPage() {
             const success = await login(username, password);
 
             if (success) {
+                message.success("Login successfully");
                 if (rememberMe) {
                     localStorage.setItem('rememberedUser', JSON.stringify({ username }));
                 } else {
@@ -403,6 +406,7 @@ export default function LoginPage() {
                 }
                 router.push('/dashboard');
             } else {
+                message.error("Login failed");
                 setError('用户名或密码错误（正确：admin/admin）');
             }
         } catch (err) {

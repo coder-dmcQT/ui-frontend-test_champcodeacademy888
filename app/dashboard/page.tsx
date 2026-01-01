@@ -1,7 +1,7 @@
 'use client'
 import {useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
-import styled, {keyframes, createGlobalStyle} from 'styled-components';
+import styled, {keyframes, createGlobalStyle, css} from 'styled-components';
 import {useAppBaseState} from '@/src/store/useAppBaseState';
 import {createDialog} from "@/src/components/Dialog";
 
@@ -29,6 +29,16 @@ const backgroundAnimation = keyframes`
     }
     100% {
         background-position: 0% 50%;
+    }
+`;
+
+// 新增 Loading 旋转动画
+const spinLoading = keyframes`
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 `;
 
@@ -190,15 +200,46 @@ const SidebarItem = styled.li.withConfig({
 
 // 主内容区
 const MainContent = styled.main.withConfig({
-    shouldForwardProp: (prop) => prop !== 'isDarkMode'
-})<{ isDarkMode: boolean }>`
+    shouldForwardProp: (prop) => prop !== 'isDarkMode' && prop !== 'loading',
+})<{ isDarkMode: boolean, loading: boolean }>`
     margin-top: 60px;
     margin-left: 180px;
     padding: 30px;
     flex: 1;
     background: ${({isDarkMode}) => (isDarkMode ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.8)')};
-    backdrop-filter: blur(1000px);
+    backdrop-filter: blur(10px);
     min-height: 100vh;
+    position: relative;
+
+    /* Loading 遮罩 */
+    ${({loading, isDarkMode}) => loading && css`
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: ${(isDarkMode ? 'rgba(15, 23, 42, 0.6)' : 'rgba(255, 255, 255, 0.6)')};
+            backdrop-filter: blur(2px);
+            z-index: 10;
+        }
+    `} /* Loading 图标 */ ${({loading, isDarkMode}) => loading && css`
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 4px solid ${(isDarkMode ? '#312e81' : '#e5e7eb')};
+            border-top-color: #6366f1;
+            border-radius: 50%;
+            animation: ${spinLoading} 1s linear infinite;
+            z-index: 11;
+        }
+    `}
 `;
 
 // 筛选框
@@ -280,6 +321,16 @@ const LessonCardInfoContainer = styled.div`
     flex-direction: column;
 `
 
+const StudentItem = styled.i.withConfig({
+    shouldForwardProp: (prop) => prop !== 'isDarkMode' && prop !== 'isMine'
+})<{ isDarkMode: boolean, isMine: boolean }>`
+    color: ${({isDarkMode, isMine}) => (isMine ? 'red' : isDarkMode ? '#f9fafb' : '#111827')};
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 9px;
+    text-decoration: underline;
+`
+
 // 卡片信息项
 const CardInfo = styled.div.withConfig({
     shouldForwardProp: (prop) => prop !== 'isDarkMode'
@@ -318,6 +369,7 @@ export default function Dashboard() {
     const [activeTab, setActiveTab] = useState('today');
     const router = useRouter();
     const {username, logout, isLoggedIn, isDarkerMode: isDarkMode, setDarkerMode} = useAppBaseState();
+    const [loading, setLoading] = useState(false);
 
     // 未登录重定向到登录页
     useEffect(() => {
@@ -365,14 +417,14 @@ export default function Dashboard() {
         {
             date: '2024-08-15',
             time: '10:00 - 11:30',
-            students: 'Alice Smith',
+            students: ['Alice Smith'],
             subject: 'Mathematics',
             type: '1-on-1'
         },
         {
             date: '2024-08-16',
             time: '14:00 - 15:30',
-            students: 'Bob Johnson, Charlie Brown',
+            students: [`Bob Johnson`, `Charlie Brown`, 'admin'],
             subject: 'English Literature',
             type: 'Group'
         },
@@ -414,7 +466,7 @@ export default function Dashboard() {
                 </Sidebar>
 
                 {/* 主内容区 */}
-                <MainContent isDarkMode={isDarkMode}>
+                <MainContent isDarkMode={isDarkMode} loading={loading}>
                     {/* 筛选框 */}
                     <FilterBar isDarkMode={isDarkMode}>
                         <FilterLabel isDarkMode={isDarkMode}>Date Range：</FilterLabel>
@@ -440,13 +492,14 @@ export default function Dashboard() {
                                         <span>Time：</span> {lesson.time}
                                     </CardInfo>
                                     <CardInfo isDarkMode={isDarkMode}>
-                                        <span>Students：</span> {lesson.students}
+                                        <span>Students：</span> {lesson.students.map((item, index) =>
+                                        (
+                                            <StudentItem isDarkMode={isDarkMode} isMine={item === username}
+                                                         key={index}>{item}{item === username ? '(me)' : ''}</StudentItem>
+                                        ))}
                                     </CardInfo>
                                     <CardInfo isDarkMode={isDarkMode}>
                                         <span>Subject：</span> {lesson.subject}
-                                    </CardInfo>
-                                    <CardInfo isDarkMode={isDarkMode}>
-                                        <span>Type：</span> {lesson.type}
                                     </CardInfo>
                                 </LessonCardInfoContainer>
                                 <JoinBtn isDarkMode={isDarkMode}>Take Lesson</JoinBtn>
