@@ -2,9 +2,8 @@
 import {setupWorker} from "msw/browser";
 import {handlers} from "@/src/mock/handlers";
 
-export const worker = setupWorker(...handlers);
-
 export const start = async () => {
+    const worker = setupWorker(...handlers);
     try {
         await worker.start({
             onUnhandledRequest: 'bypass'
