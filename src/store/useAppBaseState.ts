@@ -1,21 +1,27 @@
-import { create } from "zustand/react";
-import { persist } from "zustand/middleware/persist";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-interface AuthState {
+interface AppBaseState {
     isLoggedIn: boolean;
     username: string;
     password: string; // 注意：实际项目中不要存储明文密码，这里仅为Mock
     login: (username: string, password: string) => Promise<boolean>;
     logout: () => Promise<boolean>;
+    isDarkerMode: boolean;
+    setDarkerMode: (mode: boolean) => void;
 }
 
-export const useAuthState = create<AuthState>()(
+export const useAppBaseState = create<AppBaseState>()(
     persist(
         (set) => ({
             // 初始状态
             isLoggedIn: false,
             username: "",
             password: "",
+            isDarkerMode: false,
+            setDarkerMode: (mode: boolean) => set({
+                isDarkerMode: mode,
+            }),
 
             // 登录逻辑（Mock：仅验证 admin/admin）
             login: async (username: string, password: string) => {

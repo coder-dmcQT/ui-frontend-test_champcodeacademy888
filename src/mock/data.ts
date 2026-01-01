@@ -1,10 +1,10 @@
 export type UserLoginBody = {
-    userName: string;
+    username: string;
     password: string;
 }
 
 export const userData: UserLoginBody = {
-    userName: 'admin', password: 'admin',
+    username: 'admin', password: 'admin',
 }
 
 export const lessonsDataMocked = [

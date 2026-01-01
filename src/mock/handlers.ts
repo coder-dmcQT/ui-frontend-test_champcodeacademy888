@@ -5,12 +5,12 @@ import {sleepInAsync} from "@/src/utils/sleepInAsync";
 export const handlers = [
     http.post("/api/login", async ({request}) => {
         const reqBody = (await request.json()) as UserLoginBody;
-        if (reqBody.userName === userData.userName && reqBody.password === userData.password) {
+        if (reqBody.username === userData.username && reqBody.password === userData.password) {
             return HttpResponse.json({
                 code: 200,
                 data: {
                     isLoggedIn: true,
-                    username: reqBody.userName,
+                    username: reqBody.username,
                     password: reqBody.password,
                 }
             }, {status: 200});
@@ -20,7 +20,7 @@ export const handlers = [
             error: "username and password not correct! They are both admin!"
         }, {status: 200});
     }),
-    http.post("/api/logout", async () => {
+    http.get("/api/logout", async () => {
         await sleepInAsync(1000)
         return HttpResponse.json({
             code: 200,
