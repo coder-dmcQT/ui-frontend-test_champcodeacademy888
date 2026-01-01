@@ -429,7 +429,7 @@ export default function LoginPage() {
             <LoginContainer isDarkMode={isDarkMode}>
                 {/* 暗黑模式切换按钮 */}
                 <ThemeToggle onClick={toggleDarkMode}>
-                    {isDarkMode ? '☀️' : '🌙'}
+                    {!isDarkMode ? '☀️' : '🌙'}
                 </ThemeToggle>
 
                 {/* 背景粒子 */}

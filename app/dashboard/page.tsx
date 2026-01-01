@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 import styled, {keyframes, createGlobalStyle} from 'styled-components';
 import {useAppBaseState} from '@/src/store/useAppBaseState';
+import {createDialog} from "@/src/components/Dialog";
 
 // -------------------------- 全局样式（与登录页保持一致） --------------------------
 const GlobalStyles = createGlobalStyle`
@@ -334,12 +335,21 @@ export default function Dashboard() {
 
     // 处理登出
     const handleLogout = async () => {
-        const isLogoutDone = await logout();
-        if (isLogoutDone) {
-            router.push('/login');
-        } else {
+        createDialog({
+            title: "Confirm Logout",
+            content: "Are you sure you want to log out?",
+            isDarkMode,
+            confirmText: "Logout",
+            cancelText: "Cancel",
+            async onConfirm() {
+                const isLogoutDone = await logout();
+                if (isLogoutDone) {
+                    router.push('/login');
+                } else {
 
-        }
+                }
+            }
+        })
     };
 
     // 侧边栏菜单数据
@@ -381,7 +391,7 @@ export default function Dashboard() {
                             Logout
                         </LogoutBtn>
                         <ThemeToggle onClick={toggleDarkMode}>
-                            {isDarkMode ? '☀️' : '🌙'}
+                            {!isDarkMode ? '☀️' : '🌙'}
                         </ThemeToggle>
                     </UserArea>
                 </AppBar>
