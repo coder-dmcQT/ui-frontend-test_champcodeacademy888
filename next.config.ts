@@ -13,7 +13,9 @@ const nextConfig: NextConfig = {
     },
     env: {
         enableMSW: process.env.NEXT_PUBLIC_ENABLE_MSW
-    }
+    },
+    basePath: "",
+    assetPrefix: './'
 };
 
 export default nextConfig;
