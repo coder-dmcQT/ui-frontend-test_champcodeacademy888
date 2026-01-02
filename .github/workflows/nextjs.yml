@@ -57,7 +57,7 @@ jobs:
       - name: Upload dist artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist  # 部署目录保持为 dist
+          path: ./docs  # 部署目录保持为 dist
       # 在 Build Next.js project 步骤后添加：
       # 在 Build Next.js project 步骤后添加：
       - name: Check generated files
