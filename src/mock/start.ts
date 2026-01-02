@@ -10,7 +10,10 @@ export const start = async () => {
     try {
         console.log('nextcon', nextConfig);
         await worker.start({
-            onUnhandledRequest: 'bypass'
+            onUnhandledRequest: 'bypass',
+            serviceWorker: {
+                url: "/ui-frontend-test_champcodeacademy888/mockServiceWorker.js"
+            }
         });
         await initLessonsData(lessonsDataMocked)
         console.log('mock started done!')

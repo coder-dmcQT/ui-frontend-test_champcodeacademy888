@@ -373,7 +373,7 @@ export default function Dashboard() {
         setLoading(false);
 
         if (!isLoggedIn) {
-            router.push('/ui-frontend-test_champcodeacademy888/login');
+            router.push('/login');
             return;
         }
 
