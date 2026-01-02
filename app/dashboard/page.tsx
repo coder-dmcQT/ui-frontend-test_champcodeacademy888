@@ -1,5 +1,5 @@
 'use client'
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useMemo, useCallback, useRef} from 'react';
 import {useRouter} from 'next/navigation';
 import styled, {keyframes, createGlobalStyle, css} from 'styled-components';
 import {useAppBaseState} from '@/src/store/useAppBaseState';
@@ -363,30 +363,65 @@ const JoinBtn = styled.button.withConfig({
         background: linear-gradient(90deg, #4f46e5, #7c3aed);
     }
 `;
+import {getLessons, LessonDataItem} from "@/src/request/fetchData";
+import useMessage from "@/src/components/Message";
 
 // -------------------------- Dashboard 页面 --------------------------
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState('today');
     const router = useRouter();
-    const {username, logout, isLoggedIn, isDarkerMode: isDarkMode, setDarkerMode} = useAppBaseState();
+    const {username, logout, isLoggedIn, isDarkerMode: isDarkMode, setDarkerMode, hydrated} = useAppBaseState();
     const [loading, setLoading] = useState(false);
+    const [currentData, setCurrentData] = useState<LessonDataItem[]>([]);
+    const message = useMessage();
+    const isFirstFetchDone = useRef(false)
+    const msgRef = useRef(message);
+
+    useEffect(() => {
+        msgRef.current = message
+    }, [message]);
+    
+    const showError = useCallback((text: string) => {
+        msgRef.current.error(text);
+    }, [])
+
+    const getData = useCallback(async () => {
+        if (isFirstFetchDone.current) return;
+        try {
+            setLoading(true);
+            const data = await getLessons({})
+            setCurrentData(data)
+            isFirstFetchDone.current = true;
+        } catch {
+            showError(`Error here`)
+        } finally {
+            setLoading(false);
+        }
+    }, [showError])
 
     // 未登录重定向到登录页
     useEffect(() => {
+        if (!hydrated) {
+            setLoading(true);
+            return
+        }
+        setLoading(false)
         if (!isLoggedIn) {
             router.push('/login');
+            return;
         }
-
-    }, [isLoggedIn, router]);
+        if (!isFirstFetchDone.current)
+            getData().then()
+    }, [isLoggedIn, router, hydrated, getData]);
 
     // 切换暗黑模式
-    const toggleDarkMode = () => {
+    const toggleDarkMode = useCallback(() => {
         const newMode = !isDarkMode;
         setDarkerMode(newMode);
-    };
+    }, [isDarkMode, setDarkerMode]);
 
     // 处理登出
-    const handleLogout = async () => {
+    const handleLogout = useCallback(async () => {
         createDialog({
             title: "Confirm Logout",
             content: "Are you sure you want to log out?",
@@ -402,33 +437,15 @@ export default function Dashboard() {
                 }
             }
         })
-    };
+    }, [isDarkMode, logout, router]);
 
     // 侧边栏菜单数据
-    const sidebarTabs = [
+    const sidebarTabs = useMemo(() => [
         {key: 'historic', label: 'Historic Lessons (completed)'},
         {key: 'upcoming', label: 'Upcoming Lessons'},
         {key: 'available', label: 'Available Lessons (open slots)'},
         {key: 'today', label: 'Today’s Lessons'},
-    ];
-
-    // 模拟课程数据（仅布局用）
-    const mockLessons = [
-        {
-            date: '2024-08-15',
-            time: '10:00 - 11:30',
-            students: ['Alice Smith'],
-            subject: 'Mathematics',
-            type: '1-on-1'
-        },
-        {
-            date: '2024-08-16',
-            time: '14:00 - 15:30',
-            students: [`Bob Johnson`, `Charlie Brown`, 'admin'],
-            subject: 'English Literature',
-            type: 'Group'
-        },
-    ];
+    ], []);
 
     return (
         <>
@@ -473,23 +490,18 @@ export default function Dashboard() {
                         <DateInput type="date" isDarkMode={isDarkMode}/>
                         <DateInput type="date" isDarkMode={isDarkMode}/>
 
-                        <FilterLabel isDarkMode={isDarkMode}>Group By：</FilterLabel>
-                        <Select isDarkMode={isDarkMode}>
-                            <option value="month">Month</option>
-                            <option value="year">Year</option>
-                        </Select>
                     </FilterBar>
 
                     {/* 课程卡片容器 */}
                     <LessonsGrid>
-                        {mockLessons.map((lesson, index) => (
+                        {currentData.map((lesson, index) => (
                             <LessonCard key={index} isDarkMode={isDarkMode}>
                                 <LessonCardInfoContainer>
                                     <CardInfo isDarkMode={isDarkMode}>
-                                        <span>Date：</span> {lesson.date}
+                                        <span>Date：</span> {lesson.date.split('T')[0]}
                                     </CardInfo>
                                     <CardInfo isDarkMode={isDarkMode}>
-                                        <span>Time：</span> {lesson.time}
+                                        <span>Time：</span> {lesson.date.split('T')[1].slice(0, -1)}
                                     </CardInfo>
                                     <CardInfo isDarkMode={isDarkMode}>
                                         <span>Students：</span> {lesson.students.map((item, index) =>
@@ -500,6 +512,9 @@ export default function Dashboard() {
                                     </CardInfo>
                                     <CardInfo isDarkMode={isDarkMode}>
                                         <span>Subject：</span> {lesson.subject}
+                                    </CardInfo>
+                                    <CardInfo isDarkMode={isDarkMode}>
+                                        <span>Type：</span> {lesson.type}
                                     </CardInfo>
                                 </LessonCardInfoContainer>
                                 <JoinBtn isDarkMode={isDarkMode}>Take Lesson</JoinBtn>

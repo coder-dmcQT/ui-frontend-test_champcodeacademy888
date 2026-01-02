@@ -97,5 +97,14 @@ export const lessonsDataMocked = [
         "students": ["Elijah"],
         "tutor": "Sarah Tan",
         "status": "Confirmed"
+    },
+    {
+        "id": "L011",
+        "date": "2025-11-25T09:10:00Z",
+        "type": "Today",
+        "subject": "C++ Mastery Course",
+        "students": ["Allan Walker"],
+        "tutor": "Tokio Quicker",
+        "status": "Confirmed"
     }
 ]

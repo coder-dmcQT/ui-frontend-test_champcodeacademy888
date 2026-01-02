@@ -1,5 +1,6 @@
 'use client'
 import styled, { createGlobalStyle } from 'styled-components';
+import {Root} from "react-dom/client";
 
 // -------------------------- 全局遮罩样式 --------------------------
 const DialogGlobalStyle = createGlobalStyle`
@@ -145,6 +146,7 @@ interface DialogOptions {
 // -------------------------- 全局 Dialog 管理器 --------------------------
 let dialogInstance: React.ReactElement | null = null;
 let dialogContainer: HTMLDivElement | null = null;
+let root: Root | null
 
 // 创建 Dialog 函数（仿 naive-ui dialog.create）
 export const createDialog = (options: DialogOptions) => {
@@ -232,7 +234,9 @@ export const createDialog = (options: DialogOptions) => {
         // 使用 ReactDOM 渲染（需安装 @types/react-dom）
         import('react-dom/client').then(({ createRoot }) => {
             if (dialogContainer) {
-                const root = createRoot(dialogContainer);
+                if (!root) {
+                    root = createRoot(dialogContainer)
+                }
                 root.render(dialogElement);
             }
         });

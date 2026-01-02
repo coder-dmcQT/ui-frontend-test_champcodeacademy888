@@ -31,7 +31,7 @@ export const handlers = [
         const url = new URL(request.url);
         const startDate = url.searchParams.get('startDate');
         const endDate = url.searchParams.get('endDate');
-        const type = url.searchParams.get('type') || 'today';
+        const type = url.searchParams.get('type') || 'Today';
 
         let dataFilteredFirstByType = lessonsDataMocked.filter(lesson => lesson.type === type);
         if (startDate && endDate) {

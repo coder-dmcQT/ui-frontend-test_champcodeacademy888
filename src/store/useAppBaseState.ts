@@ -1,5 +1,6 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import {create} from "zustand";
+import {persist} from "zustand/middleware";
+import {error} from "next/dist/build/output/log";
 
 interface AppBaseState {
     isLoggedIn: boolean;
@@ -9,7 +10,17 @@ interface AppBaseState {
     logout: () => Promise<boolean>;
     isDarkerMode: boolean;
     setDarkerMode: (mode: boolean) => void;
+    hydrated: boolean, // 初始为未水合
+    setHydrated: () => void;
 }
+
+const handleRehydrate = () => {
+    return (rehydratedState: AppBaseState | undefined) => {
+        if (rehydratedState) {
+            rehydratedState.setHydrated()
+        }
+    };
+};
 
 export const useAppBaseState = create<AppBaseState>()(
     persist(
@@ -19,9 +30,11 @@ export const useAppBaseState = create<AppBaseState>()(
             username: "",
             password: "",
             isDarkerMode: false,
+            hydrated: false,
             setDarkerMode: (mode: boolean) => set({
                 isDarkerMode: mode,
             }),
+            setHydrated: () => set({hydrated: true}),
 
             // 登录逻辑（Mock：仅验证 admin/admin）
             login: async (username: string, password: string) => {
@@ -33,7 +46,7 @@ export const useAppBaseState = create<AppBaseState>()(
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ username: username, password: password }),
+                        body: JSON.stringify({username: username, password: password}),
                     })
                     const json = await resp.json();
                     // Mock 验证逻辑
@@ -90,7 +103,8 @@ export const useAppBaseState = create<AppBaseState>()(
         }),
         {
             name: "auth-storage", // 存储键名（建议语义化）
-            skipHydration: true, // 启用持久化数据水合
+            skipHydration: false, // 启用持久化数据水合
+            onRehydrateStorage: handleRehydrate,
         }
     )
 );

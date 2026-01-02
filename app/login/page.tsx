@@ -387,7 +387,7 @@ export default function LoginPage() {
         e.preventDefault();
 
         if (!username || !password) {
-            setError('请输入用户名和密码');
+            setError('Please enter username and password!');
             return;
         }
 
@@ -407,10 +407,10 @@ export default function LoginPage() {
                 router.push('/dashboard');
             } else {
                 message.error("Login failed");
-                setError('用户名或密码错误（正确：admin/admin）');
+                setError('Wrong Credentials!');
             }
         } catch (err) {
-            setError('登录失败，请重试');
+            setError('Login failed!');
             console.error('登录异常：', err);
         } finally {
             setIsLoading(false);
@@ -452,29 +452,29 @@ export default function LoginPage() {
                 {/* 登录卡片 */}
                 <LoginCard isDarkMode={isDarkMode}>
                     <form onSubmit={handleLogin}>
-                        <LoginTitle isDarkMode={isDarkMode}>欢迎登录</LoginTitle>
+                        <LoginTitle isDarkMode={isDarkMode}>Login Now</LoginTitle>
 
                         <InputGroup>
-                            <InputLabel isDarkMode={isDarkMode}>用户名</InputLabel>
+                            <InputLabel isDarkMode={isDarkMode}>username</InputLabel>
                             <Input
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 disabled={isLoading}
-                                placeholder="请输入用户名"
+                                placeholder="please enter username"
                                 isDarkMode={isDarkMode}
                             />
                         </InputGroup>
 
                         <InputGroup>
-                            <InputLabel isDarkMode={isDarkMode}>密码</InputLabel>
+                            <InputLabel isDarkMode={isDarkMode}>password</InputLabel>
                             <PasswordWrapper>
                                 <Input
                                     type={showPassword ? 'text' : 'password'}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     disabled={isLoading}
-                                    placeholder="请输入密码"
+                                    placeholder="please input your password"
                                     isDarkMode={isDarkMode}
                                 />
                                 <PasswordToggle
@@ -498,7 +498,7 @@ export default function LoginPage() {
                                 disabled={isLoading}
                             />
                             <RememberLabel htmlFor="remember" isDarkMode={isDarkMode}>
-                                记住用户名
+                                remember username
                             </RememberLabel>
                         </RememberWrapper>
 
@@ -509,11 +509,11 @@ export default function LoginPage() {
                             disabled={isLoading}
                             isLoading={isLoading}
                         >
-                            {isLoading ? '' : '登录'}
+                            {isLoading ? 'Opearting....' : 'Login'}
                         </LoginButton>
 
                         <FooterText isDarkMode={isDarkMode}>
-                            测试账号：<span>admin</span> / 密码：<span>admin</span>
+                            Test Account：<span>admin</span> / Password：<span>admin</span>
                         </FooterText>
                     </form>
                 </LoginCard>
