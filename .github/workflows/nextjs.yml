@@ -57,7 +57,7 @@ jobs:
 
       # 6. 构建 Next.js 项目（输出到 dist 目录）
       - name: Build Next.js project
-        run: npm run build:inner --outdir dist  # 需确保 package.json 中配置了该脚本
+        run: npm run build:inner  # 需确保 package.json 中配置了该脚本
         env:
           # 构建环境变量（关键：传递仓库名作为 basePath）
           NODE_ENV: production
