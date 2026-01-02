@@ -5,7 +5,7 @@ on:
     branches: ["master"]
 
 permissions:
-  contents: write  # Add this to allow pushing to gh-pages branch
+  contents: write  # Add this to allow pushing to gh-pages branch gh-page
 
 jobs:
   deploy:
