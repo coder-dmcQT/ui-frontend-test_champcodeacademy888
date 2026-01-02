@@ -34,17 +34,6 @@ jobs:
           node-version: "20"  # Next.js 14+ 推荐 20.x
           cache: "npm"        # 缓存 npm 依赖（用 yarn 则改为 yarn）
 
-      # 4. 恢复 Next.js 构建缓存（加速二次构建）
-      - name: Restore Next.js cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .next/cache
-            node_modules
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx', '**/*.js') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-
-
       # 5. 安装项目依赖
       - name: Install dependencies
         run: npm install  # 已切换为 npm，无需修改
