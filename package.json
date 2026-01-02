@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev:inner": "set NEXT_PUBLIC_ENABLE_MSW=1&& next dev",
-    "build": "next build",
+    "build:inner": "next build",
     "start": "next start",
     "lint": "eslint"
   },
