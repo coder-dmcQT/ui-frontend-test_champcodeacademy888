@@ -468,7 +468,13 @@ export default function Dashboard() {
             const resp = await takeLesson(params)
             console.log('lesson-take', resp)
             if (resp.code === 200) {
-                lesson.students.push(username)
+                setCurrentData(prevData =>
+                    prevData.map(item =>
+                        item.id === lesson.id
+                            ? { ...item, students: [...item.students, username] }
+                            : item
+                    )
+                )
             } else {
                 console.log('resp here', resp)
             }
