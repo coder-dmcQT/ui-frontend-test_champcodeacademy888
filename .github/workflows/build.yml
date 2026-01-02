@@ -4,6 +4,9 @@ on:
   push:
     branches: ["master"]
 
+permissions:
+  contents: write  # Add this to allow pushing to gh-pages branch
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
