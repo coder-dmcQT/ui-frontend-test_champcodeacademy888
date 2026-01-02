@@ -57,7 +57,7 @@ jobs:
 
       # 6. 构建 Next.js 项目（输出到 dist 目录）
       - name: Build Next.js project
-        run: npm run build:inner  # 需确保 package.json 中配置了该脚本
+        run: npm run build:inner --outdir dist  # 需确保 package.json 中配置了该脚本
         env:
           # 构建环境变量（关键：传递仓库名作为 basePath）
           NODE_ENV: production
@@ -68,6 +68,12 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist  # 部署目录保持为 dist
+      # 在 Build Next.js project 步骤后添加：
+      # 在 Build Next.js project 步骤后添加：
+      - name: Check generated files
+        run: |
+          echo "current dir: "
+          ls -la
 
   # 第二步：部署到 GitHub Pages
   deploy:
