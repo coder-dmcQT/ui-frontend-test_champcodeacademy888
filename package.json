@@ -7,7 +7,7 @@
     "build:inner": "next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "gh-pages -d out"
+    "deploy": "gh-pages -d out -t true"
   },
   "homepage": "https://github.com/coder-dmcQT/ui-frontend-test_champcodeacademy888",
   "dependencies": {

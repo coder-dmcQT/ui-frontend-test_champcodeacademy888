@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
         unoptimized: true
     },
     assetPrefix: '/ui-frontend-test_champcodeacademy888/',
+    trailingSlash: true
 };
 
 export default nextConfig;
