@@ -1,5 +1,5 @@
 export type GetLessonsRequestParams = {
-    type?: 'Historic' | 'Upcoming' | 'Available' | 'Today',
+    type: 'Historic' | 'Upcoming' | 'Available' | 'Today',
     startDate?: Date,
     endDate?: Date,
     [key: string]: unknown

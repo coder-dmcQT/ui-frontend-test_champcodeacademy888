@@ -7,7 +7,17 @@ export const userData: UserLoginBody = {
     username: 'admin', password: 'admin',
 }
 
-export const lessonsDataMocked = [
+export type LessonDataItem = {
+    id: string;
+    date: string;
+    type: string;
+    subject: string;
+    students: string[];
+    tutor: string | null;
+    status: string;
+}
+
+export const lessonsDataMocked: LessonDataItem[] = [
     {
         "id": "L001",
         "date": "2025-10-28T14:00:00Z",
