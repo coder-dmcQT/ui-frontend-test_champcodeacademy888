@@ -346,6 +346,10 @@ export default function Dashboard() {
         msgRef.current.error(text);
     }, [])
 
+    const showSuccess = useCallback((text: string) => {
+        msgRef.current.success(text);
+    }, [])
+
     getData.current = async () => {
         try {
             setLoading(true);
@@ -468,6 +472,7 @@ export default function Dashboard() {
             const resp = await takeLesson(params)
             console.log('lesson-take', resp)
             if (resp.code === 200) {
+                showSuccess(`Lesson ${lesson.id} successfully successfully.`)
                 setCurrentData(prevData =>
                     prevData.map(item =>
                         item.id === lesson.id
@@ -476,6 +481,7 @@ export default function Dashboard() {
                     )
                 )
             } else {
+                showError(`Lesson ${lesson.id} failurefully successfully, with error ${resp.error}`)
                 console.log('resp here', resp)
             }
         } catch (e) {
@@ -567,7 +573,7 @@ export default function Dashboard() {
                                         </CardInfo>
                                     </LessonCardInfoContainer>
                                     <JoinBtn onClick={() => takeLessonAction(lesson)} loading={takingLesson}
-                                             disabled={lesson.students.includes(username)} isDarkMode={isDarkMode}>
+                                             disabled={lesson.students.includes(username) || takingLesson} isDarkMode={isDarkMode}>
                                         <LoadingOverlay
                                             visible={takingLesson}
                                             isDarkMode={isDarkMode}
