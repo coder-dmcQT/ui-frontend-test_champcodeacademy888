@@ -3,16 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
     output:'export',
-    distDir:'./docs',
-    experimental: {
-
-    },
+    basePath: "/ui-frontend-test_champcodeacademy888",
     reactStrictMode: true,
     images: {
         unoptimized: true
     },
-    basePath: "",
-    assetPrefix: './'
+    assetPrefix: '/ui-frontend-test_champcodeacademy888/'
 };
 
 export default nextConfig;

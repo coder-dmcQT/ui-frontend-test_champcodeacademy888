@@ -363,7 +363,7 @@ export default function LoginPage() {
     // 已登录跳转
     useEffect(() => {
         if (isLoggedIn) {
-            router.push('/dashboard');
+            router.push('/ui-frontend-test_champcodeacademy888/dashboard');
         }
 
         // 读取记住密码

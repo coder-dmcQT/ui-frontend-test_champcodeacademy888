@@ -6,8 +6,10 @@
     "dev:inner": "set NEXT_PUBLIC_ENABLE_MSW=1&& next dev",
     "build:inner": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy": "gh-pages -d out"
   },
+  "homepage": "https://github.com/coder-dmcQT/ui-frontend-test_champcodeacademy888",
   "dependencies": {
     "framer-motion": "^12.23.26",
     "msw": "^2.12.7",
@@ -25,6 +27,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
+    "gh-pages": "^6.3.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
