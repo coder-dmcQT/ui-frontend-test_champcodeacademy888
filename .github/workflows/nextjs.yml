@@ -60,7 +60,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       # 部署 dist 目录到 GitHub Pages
       - name: Deploy to GitHub Pages
