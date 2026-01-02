@@ -11,9 +11,6 @@ const nextConfig: NextConfig = {
     images: {
         unoptimized: true
     },
-    env: {
-        enableMSW: process.env.NEXT_PUBLIC_ENABLE_MSW
-    },
     basePath: "",
     assetPrefix: './'
 };
