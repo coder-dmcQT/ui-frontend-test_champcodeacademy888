@@ -32,7 +32,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"  # Next.js 14+ 推荐 20.x
-          cache: "pnpm"        # 缓存 npm 依赖（用 yarn 则改为 yarn）
+          cache: "npm"        # 缓存 npm 依赖（用 yarn 则改为 yarn）
 
       # 3. 配置 GitHub Pages 环境（适配 Next.js 静态部署）
       - name: Configure GitHub Pages
@@ -49,17 +49,17 @@ jobs:
           path: |
             .next/cache
             node_modules
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json', 'yarn.lock', 'pnpm-lock.yml') }}-${{ hashFiles('**/*.ts', '**/*.tsx', '**/*.js') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json', 'yarn.lock') }}-${{ hashFiles('**/*.ts', '**/*.tsx', '**/*.js') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json', 'yarn.lock', 'pnpm-lock.yml') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json', 'yarn.lock') }}-
 
       # 5. 安装项目依赖
       - name: Install dependencies
-        run: pnpm install  # 用 yarn 则改为 yarn install
+        run: npm install  # 用 yarn 则改为 yarn install
 
       # 6. 构建 Next.js 项目（输出到 dist 目录）
       - name: Build Next.js project
-        run: pnpm build:inner  # 核心：需确保 package.json 中 build 脚本输出到 dist
+        run: npm run build:inner  # 核心：需确保 package.json 中 build 脚本输出到 dist
         env:
           # 构建环境变量（按需添加）
           NODE_ENV: production
