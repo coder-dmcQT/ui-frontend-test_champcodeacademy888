@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     images: {
         unoptimized: true
     },
-    assetPrefix: '/ui-frontend-test_champcodeacademy888/'
+    assetPrefix: '/ui-frontend-test_champcodeacademy888/',
 };
 
 export default nextConfig;
